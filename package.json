@@ -1,0 +1,76 @@
+{
+  "name": "maslows-particle-system",
+  "version": "0.1.0",
+  "private": true,
+  "description": "source repo for [my OpenJS World 2020 talk](https://openjsworld2020.sched.com/event/dcc1e123352786c7d1a3a4e59a9db052)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mysterycommand/maslows-particle-system.git"
+  },
+  "keywords": [
+    "source",
+    "code",
+    "personal",
+    "portfolio",
+    "website",
+    "react",
+    "three"
+  ],
+  "author": "Matt Hayes <matt@mysterycommand.com>",
+  "license": "(MIT OR Apache-2.0)",
+  "bugs": {
+    "url": "https://github.com/mysterycommand/maslows-particle-system/issues"
+  },
+  "homepage": "https://mysterycommand.com/maslows-particle-system",
+  "engines": {
+    "node": ">=12",
+    "npm": "6.14.4",
+    "yarn": "1.22.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "lint": "eslint 'src/**/*.@(j|t)s?(x)'",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    "last 1 chrome version",
+    "last 1 edge version",
+    "last 1 firefox version",
+    "last 1 safari version"
+  ],
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "5.0.1",
+    "@semantic-release/commit-analyzer": "8.0.1",
+    "@semantic-release/git": "9.0.0",
+    "@semantic-release/github": "7.0.7",
+    "@semantic-release/npm": "7.0.5",
+    "@semantic-release/release-notes-generator": "9.0.1",
+    "@testing-library/jest-dom": "5.10.0",
+    "@testing-library/react": "10.2.1",
+    "@testing-library/user-event": "11.4.2",
+    "@types/jest": "26.0.0",
+    "@types/node": "14.0.13",
+    "@types/react": "16.9.36",
+    "@types/react-dom": "16.9.8",
+    "commitizen": "4.1.2",
+    "cz-conventional-changelog": "3.2.0",
+    "prettier": "2.0.5",
+    "react-scripts": "3.4.1",
+    "semantic-release": "17.0.8",
+    "typescript": "3.9.5"
+  }
+}
