@@ -1,0 +1,46 @@
+language: node_js
+cache: yarn
+
+env:
+  global:
+    - secure: Hb0IaujeJ32YnFC96nhaDX25f5sz6nNtaw90NPSB7vCI2+5b3kQbe/McXO4R+2MCzvxRZraA9UmtaLbNTA7NdycLynLi9QCCrweDDEjbbhg6RMMyOC8iSjO3nTgQdsYFbjRO9/L3RTacDMckkhJy+G4pjzsk7Az0y3lv0RmKm1x2tq0Z1SnbWLB4ZMn8r/hELkVy1dBVuz4wo3QKXVNHdqTWMv+iwu/7phBuOFgQt+GRtfFY7mYRQQttN5qowBW/FgVDUOESR6/Ls0FIci/LSfeE8tU1/g6p7zzA3RlmD298MDWp8KpuAEeUj01F3OTiNFhMMT29Y01TYp/9QPh97gAElD24lcKg2MGMTJ6rVOWSnsviYhFxcUvj7GYIXkTS3r4lf/4d9UC4Ex2+EZNuEI3Lx1/ckSx2RPwP2UAsen9E0o2UtzTU2Nm48Qz9ROlZJ0oLhvjH5wzkDvC98LeMKH1/CchEBCzekyREMbDPGxAoFGIj1P43V/hJuwDT7EtGMCwHbJOqkSbBjNC8Qq5R5bBArIt3926qCeLJMouBtuV+4XEcunY0GovSPM84tavAMriJb8Mibu4o9nf8M2lhkd93rcxMjdku5B3XN01+/pDGIE3YGVu6rK937Njd29fRCSe0D1dDGIl6bXy29391wf7Fb9w9enbbXKqRQP+PY2s=
+    - secure: sk6tXAo6QilOMK392S5ufuYR7xJ01vUzLdKBYs/EyditEB5hL/IAiD4D8EE7Uur2cnIqwQ96E9Ol/RXzv40/M2p8p9tcs/JIBAQU6qFfE9Q3pb3ulBG9cWhPEjaP0TBdncw1g0YBQVStwkhJ4CU6p5W0RArnI4+9HWNaKgd/GJaaJ4b+0WZERae9DUKoakv3VwYBkruHMtOzapcXdkRLnA4m7m/00I2WJy2P1IufYT56ljaUqoRxAZ7CHBT/79Zp7T3e+bxKewmAC2iWIZT04i7Yvkjg7BSS83sYNU9W5pXlCq72EDiuWp5t0AsmkchgmXxia+evWehZ5qir7RmEYSD1JH5AK4Dm+O7ALJEPP/cn34ZckQkM6MJiuez+/OUZu0bf+NBmFllQL/sdlGZJYZnpKBEuoUvV2JM6uLQqeh1mjhFvuQHaFdrsJFQbtaH5LjJdbL6Ll78g6riyd2ToAvBdaZJWr9I5ZC7q7xqj1nL8mh6WQ8VMsm1MuKRPcNLhyEWGDh/DeqGNQcI5tdoFKjM1Pe7sYSF7sKASFy5Pzs6nnkFb4m+6WcBeNDdZtrJDE1gAVFI2PVFREHG/5TSt2zHPVcRNFd99NriLOfJl+rQMyWcDxL8JItcb2aYn2aPJKfhgQCoI0/QIGvM+McXWnk6wMAXx6eNE04hZJB7RG8w=
+
+before_install:
+  # get the right npm version
+  - NPM_VERSION=`node -pe "require('./package.json').engines.npm"`
+  - if [ `npm --version` != "$NPM_VERSION" ]; then
+    npm install --global npm@${NPM_VERSION};
+    fi
+
+  # get the right yarn version
+  - YARN_VERSION=`node -pe "require('./package.json').engines.yarn"`
+  - if [ `yarn --version` != "$YARN_VERSION" ]; then
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION;
+    export PATH=$HOME/.yarn/bin:$PATH;
+    fi
+
+script:
+  - yarn lint
+  - yarn test
+  - yarn build
+
+deploy:
+  # deploy a git tag, release notes, bump package.json, update READMEs
+  - provider: script
+    skip_cleanup: true
+    script: npx semantic-release
+    on:
+      branch: master
+
+  # deploy the site
+  - provider: pages
+    repo: mysterycommand/maslows-particle-system
+    target_branch: gh-pages
+    github_token: $GH_TOKEN
+    allow_empty_commit: true
+    skip_cleanup: true
+    keep_history: true
+    local_dir: build
+    on:
+      branch: master
