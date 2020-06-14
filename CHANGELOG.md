@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.2.0...v1.3.0) (2020-06-14)
+
+
+### Bug Fixes
+
+* **cli:** forgot to add the dependency when I picked out the cli as a branch ([8d077ab](https://github.com/mysterycommand/maslows-particle-system/commit/8d077ab54f09b23aee92cead3c3985c01425d24d))
+
+
+### Features
+
+* **app/fireworks:** yarn g Fireworks ([9bd535f](https://github.com/mysterycommand/maslows-particle-system/commit/9bd535f9f5fa57d86caca89a314426f186300fc0))
+
 # [1.2.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.1.0...v1.2.0) (2020-06-14)
 
 
