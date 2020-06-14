@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { Sender } from '../types';
+import { Sender } from '../../types';
 
 import { Message } from './Message';
 

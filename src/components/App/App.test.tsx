@@ -3,8 +3,8 @@ import React from 'react';
 
 import { App } from './App';
 
-test('renders Echo', () => {
+test('renders Bot', () => {
   const { getByText } = render(<App />);
-  const helloText = getByText(/Echo/i);
-  expect(helloText).toBeInTheDocument();
+  const botText = getByText(/Bot/i);
+  expect(botText).toBeInTheDocument();
 });
