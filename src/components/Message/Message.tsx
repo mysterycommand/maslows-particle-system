@@ -1,13 +1,40 @@
 import clsx from 'clsx';
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, Dispatch } from 'react';
 
-import { MessageData, Sender } from '../types';
+import { MessageData, Sender, AppAction } from '../types';
 
 import style from './Message.module.css';
 
-interface Props extends Pick<MessageData, 'createdAt' | 'sender' | 'content'> {}
+interface Props extends MessageData {
+  messagesHeight: number;
+  dispatch: Dispatch<AppAction>;
+}
 
-export const Message: FC<Props> = ({ createdAt, sender, content }) => {
+const { getComputedStyle: getStyle } = window;
+
+const outerTop: (el: HTMLElement) => number = (el) => {
+  const { marginTop } = getStyle(el);
+  return el.offsetTop - parseInt(marginTop, 10);
+};
+
+const outerHeight: (el: HTMLElement) => number = (el) => {
+  const { marginTop, height, marginBottom } = getStyle(el);
+  return [marginTop, height, marginBottom].reduce(
+    (acc, px) => acc + parseInt(px, 10),
+    0,
+  );
+};
+
+export const Message: FC<Props> = ({
+  id,
+  createdAt,
+  sender,
+  content,
+  top,
+  height,
+  messagesHeight,
+  dispatch,
+}) => {
   const messageRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -15,10 +42,21 @@ export const Message: FC<Props> = ({ createdAt, sender, content }) => {
       return;
     }
 
-    messageRef.current.scrollIntoView({
-      behavior: 'smooth',
-    });
-  }, []);
+    if (!(top && height)) {
+      dispatch({
+        type: 'renderMessage',
+        payload: {
+          id,
+          top: messagesHeight + outerTop(messageRef.current),
+          height: outerHeight(messageRef.current),
+        },
+      });
+    } else {
+      messageRef.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+  }, [dispatch, height, id, messagesHeight, top]);
 
   return (
     <li
@@ -28,6 +66,9 @@ export const Message: FC<Props> = ({ createdAt, sender, content }) => {
         [style.Other]: sender === Sender.Other,
       })}
       title={createdAt}
+      style={{
+        top,
+      }}
       ref={messageRef}
     >
       {content}
