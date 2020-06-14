@@ -106,14 +106,14 @@ export const App: FC = () => {
               }
 
               const { clientHeight } = messagesRef.current;
+              const didMeasure = top && height;
+              const isInBounds =
+                top &&
+                height &&
+                top < messagesTop + clientHeight &&
+                top + height > messagesTop;
 
-              if (
-                !(top && height) ||
-                (top &&
-                  height &&
-                  top < messagesTop + clientHeight &&
-                  top + height > messagesTop)
-              ) {
+              if (!didMeasure || isInBounds) {
                 acc.push(
                   <Message
                     key={id}
