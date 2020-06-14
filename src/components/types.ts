@@ -14,11 +14,19 @@ export interface MessageData {
 
 export interface AppState {
   messages: MessageData[];
+  messagesTop: number;
   messagesHeight: number;
 }
 
-export interface InitMessagesAction {
-  type: 'initMessages';
+export interface SetMessagesTopAction {
+  type: 'setMessagesTop';
+  payload: {
+    messagesTop: number;
+  };
+}
+
+export interface SetMessagesHeightAction {
+  type: 'setMessagesHeight';
   payload: {
     messagesHeight: number;
   };
@@ -42,6 +50,7 @@ export interface RenderMessageAction {
 }
 
 export type AppAction =
-  | InitMessagesAction
+  | SetMessagesTopAction
+  | SetMessagesHeightAction
   | AddMessageAction
   | RenderMessageAction;

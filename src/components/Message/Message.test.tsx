@@ -5,8 +5,6 @@ import { Sender } from '../types';
 
 import { Message } from './Message';
 
-window.HTMLElement.prototype.scrollIntoView = () => {};
-
 test('renders Message', () => {
   const { getByText } = render(
     <Message

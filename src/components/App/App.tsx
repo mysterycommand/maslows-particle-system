@@ -1,25 +1,24 @@
-import React, {
-  FC,
-  ReactNode,
-  Reducer,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, Reducer, useReducer } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { Form } from '../Form';
-import { Message } from '../Message';
+import { Messages } from '../Messages';
 import { AppAction, AppState } from '../types';
 
 import style from './App.module.css';
 
 const reducer: Reducer<AppState, AppAction> = (state, action) => {
   switch (action.type) {
-    case 'initMessages':
+    case 'setMessagesTop':
       return {
         messages: state.messages,
+        messagesTop: action.payload.messagesTop,
+        messagesHeight: state.messagesHeight,
+      };
+    case 'setMessagesHeight':
+      return {
+        messages: state.messages,
+        messagesTop: state.messagesTop,
         messagesHeight: action.payload.messagesHeight,
       };
     case 'addMessage':
@@ -32,6 +31,7 @@ const reducer: Reducer<AppState, AppAction> = (state, action) => {
             ...action.payload,
           },
         ],
+        messagesTop: state.messagesTop,
         messagesHeight: state.messagesHeight,
       };
     case 'renderMessage':
@@ -49,6 +49,7 @@ const reducer: Reducer<AppState, AppAction> = (state, action) => {
               },
               ...state.messages.slice(index + 1),
             ],
+            messagesTop: state.messagesTop,
             messagesHeight: state.messagesHeight + action.payload.height,
           }
         : state;
@@ -58,87 +59,27 @@ const reducer: Reducer<AppState, AppAction> = (state, action) => {
 };
 
 export const App: FC = () => {
-  const [{ messages, messagesHeight }, dispatch] = useReducer(reducer, {
-    messages: [],
-    messagesHeight: 0,
-  });
-
-  const messagesRef = useRef<HTMLOListElement>(null);
-
-  useEffect(() => {
-    if (!messagesRef.current) {
-      return;
-    }
-
-    dispatch({
-      type: 'initMessages',
-      payload: {
-        messagesHeight: messagesRef.current.clientHeight,
-      },
-    });
-  }, []);
-
-  const [messagesTop, setMessagesTop] = useState(0);
-
-  useEffect(() => {
-    if (!messagesRef.current) {
-      return;
-    }
-
-    const el = messagesRef.current;
-    const onScroll = () => setMessagesTop(el.scrollTop);
-    el.addEventListener('scroll', onScroll, { passive: true });
-
-    return () => {
-      el.removeEventListener('scroll', onScroll);
-    };
-  }, []);
+  const [{ messages, messagesTop, messagesHeight }, dispatch] = useReducer(
+    reducer,
+    {
+      messages: [],
+      messagesTop: 0,
+      messagesHeight: 0,
+    },
+  );
 
   return (
-    <div className={style.App}>
-      <article className={style.Device}>
-        <header className={style.Header}>Echo</header>
-        <ol className={style.Messages} ref={messagesRef}>
-          {messages.reduce<ReactNode[]>(
-            (acc, { id, createdAt, sender, content, top, height }) => {
-              if (!messagesRef.current) {
-                return acc;
-              }
-
-              const { clientHeight } = messagesRef.current;
-              const didMeasure = top && height;
-              const isInBounds =
-                top &&
-                height &&
-                top < messagesTop + clientHeight &&
-                top + height > messagesTop;
-
-              if (!didMeasure || isInBounds) {
-                acc.push(
-                  <Message
-                    key={id}
-                    id={id}
-                    createdAt={createdAt}
-                    sender={sender}
-                    content={content}
-                    top={top}
-                    height={height}
-                    messagesHeight={messagesHeight}
-                    dispatch={dispatch}
-                  />,
-                );
-              }
-
-              return acc;
-            },
-            [],
-          )}
-          <li className={style.Sentinel} style={{ top: messagesHeight }}></li>
-        </ol>
-        <footer className={style.Footer}>
-          <Form dispatch={dispatch} />
-        </footer>
-      </article>
-    </div>
+    <article className={style.Device}>
+      <header className={style.Header}>Echo</header>
+      <Messages
+        messages={messages}
+        messagesTop={messagesTop}
+        messagesHeight={messagesHeight}
+        dispatch={dispatch}
+      />
+      <footer className={style.Footer}>
+        <Form dispatch={dispatch} />
+      </footer>
+    </article>
   );
 };
