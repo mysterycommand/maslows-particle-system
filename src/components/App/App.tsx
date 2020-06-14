@@ -66,33 +66,34 @@ export const App: FC = () => {
             ))}
           </ol>
         </section>
-        <footer
-          className={style.Footer}
-          onSubmit={(event) => {
-            event.preventDefault();
+        <footer className={style.Footer}>
+          <form
+            action=""
+            className={style.Form}
+            onSubmit={(event) => {
+              event.preventDefault();
 
-            dispatch({
-              type: 'addMessage',
-              payload: {
-                sender: Sender.Self,
-                content: message,
-              },
-            });
-
-            setTimeout(() => {
               dispatch({
                 type: 'addMessage',
                 payload: {
-                  sender: Sender.Other,
+                  sender: Sender.Self,
                   content: message,
                 },
               });
-            }, 2_000);
 
-            setMessage('');
-          }}
-        >
-          <form action="" className={style.Form}>
+              setTimeout(() => {
+                dispatch({
+                  type: 'addMessage',
+                  payload: {
+                    sender: Sender.Other,
+                    content: message,
+                  },
+                });
+              }, 2_000);
+
+              setMessage('');
+            }}
+          >
             <input
               type="text"
               className={style.Input}
