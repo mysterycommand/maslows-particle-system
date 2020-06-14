@@ -10,9 +10,14 @@ window.HTMLElement.prototype.scrollIntoView = () => {};
 test('renders Message', () => {
   const { getByText } = render(
     <Message
+      id={'uuid'}
       createdAt={new Date().toISOString()}
       sender={Sender.Self}
-      content={'Message'}
+      content="Message"
+      top={undefined}
+      height={undefined}
+      messagesHeight={665}
+      dispatch={() => {}}
     />,
   );
   const text = getByText(/Message/i);
