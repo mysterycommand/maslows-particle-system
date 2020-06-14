@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.1.0...v1.2.0) (2020-06-14)
+
+
+### Features
+
+* **app:** a 'device' with a kind of header/section/footer module layout ([a284d02](https://github.com/mysterycommand/maslows-particle-system/commit/a284d02a2d3c2561d6d748cc7277096dc6dbcacb))
+* **app:** basic form submit, and messages state/rendering, it's an echo-bot for now ([e78e2c1](https://github.com/mysterycommand/maslows-particle-system/commit/e78e2c1d62d1ac41110e54f83cb7d110f8a8c5fe))
+* **app:** mockup of basic styling ([5b31066](https://github.com/mysterycommand/maslows-particle-system/commit/5b310667d2703cb6be50b174a583ee0a89f7ef45))
+* **app:** simple list styling ([7965e84](https://github.com/mysterycommand/maslows-particle-system/commit/7965e84ac3f9c04f94cf7e1ad8706c132e2a27be))
+* **app:** simplify styling, get rid of outer section, track height/top of message list and items ([7480fed](https://github.com/mysterycommand/maslows-particle-system/commit/7480fede3ec0a3b61aac7fd45b2745faac3d8884))
+
 # [1.1.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.0.0...v1.1.0) (2020-06-14)
 
 
