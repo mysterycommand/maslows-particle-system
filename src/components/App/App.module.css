@@ -6,3 +6,31 @@
   align-items: center;
   justify-content: center;
 }
+
+.Device {
+  width: 432px;
+  height: 768px;
+
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+}
+
+.Header,
+.Footer {
+  flex: 0 0 auto;
+}
+
+.Header {
+  background: yellow;
+}
+
+.Section {
+  flex: 1 1 100%;
+  background: magenta;
+}
+
+.Footer {
+  background: cyan;
+}
