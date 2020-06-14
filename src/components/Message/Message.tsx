@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import React, { FC, useEffect, useRef, Dispatch } from 'react';
+import React, { Dispatch, FC, useEffect, useRef } from 'react';
 
-import { MessageData, Sender, AppAction } from '../types';
+import { AppAction, MessageData, Sender } from '../types';
 
 import style from './Message.module.css';
 
@@ -42,7 +42,7 @@ export const Message: FC<Props> = ({
       return;
     }
 
-    if (!(top && height)) {
+    if (top === undefined && height === undefined) {
       dispatch({
         type: 'renderMessage',
         payload: {
@@ -50,10 +50,6 @@ export const Message: FC<Props> = ({
           top: messagesHeight + outerTop(messageRef.current),
           height: outerHeight(messageRef.current),
         },
-      });
-    } else {
-      messageRef.current.scrollIntoView({
-        behavior: 'smooth',
       });
     }
   }, [dispatch, height, id, messagesHeight, top]);
