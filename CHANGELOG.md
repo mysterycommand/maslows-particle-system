@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.0.0...v1.1.0) (2020-06-14)
+
+
+### Features
+
+* **package.json:** add a 'g' script to generate component folders ([5b061be](https://github.com/mysterycommand/maslows-particle-system/commit/5b061be6d025a2157a6c4909c628324bdce8138c))
+* **scripts/cli:** adds a little generator cli ([cf382d3](https://github.com/mysterycommand/maslows-particle-system/commit/cf382d3813cd7422d46614310fd8ad483610f858))
+
 # 1.0.0 (2020-06-11)
 
 
