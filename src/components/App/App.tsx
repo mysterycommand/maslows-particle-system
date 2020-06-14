@@ -7,10 +7,17 @@ import { Form } from '../Form';
 import { Messages } from '../Messages';
 
 import style from './App.module.css';
+import { Sentiment } from '../Sentiment';
 
 export const App: FC = () => {
   const [
-    { messages, messagesTop, messagesHeight, isShowingFireworks },
+    {
+      messages,
+      messagesTop,
+      messagesHeight,
+      isShowingFireworks,
+      isShowingSentiment,
+    },
     dispatch,
   ] = useReducer(reducer, initialState);
 
@@ -18,10 +25,11 @@ export const App: FC = () => {
     (action: AppAction) => {
       dispatch(action);
 
-      if (
-        action.type === 'addMessage' &&
-        action.payload.content.indexOf('say ') === 0
-      ) {
+      if (action.type !== 'addMessage') {
+        return;
+      }
+
+      if (action.payload.content.indexOf('say ') === 0) {
         setTimeout(() => {
           wrappedDispatch({
             type: 'addMessage',
@@ -33,14 +41,20 @@ export const App: FC = () => {
         }, 2_000);
       }
 
-      if (
-        action.type === 'addMessage' &&
-        action.payload.content === 'congrats'
-      ) {
+      if (action.payload.content === 'congrats') {
         dispatch({
           type: 'setIsShowingFireworks',
           payload: {
             isShowingFireworks: true,
+          },
+        });
+      }
+
+      if (action.payload.content === '❤️') {
+        dispatch({
+          type: 'setIsShowingSentiment',
+          payload: {
+            isShowingSentiment: true,
           },
         });
       }
@@ -61,6 +75,7 @@ export const App: FC = () => {
       <footer className={style.Footer}>
         <Form dispatch={wrappedDispatch} />
       </footer>
+      {isShowingSentiment && <Sentiment dispatch={dispatch} />}
     </article>
   );
 };

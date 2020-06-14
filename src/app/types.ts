@@ -17,6 +17,7 @@ export interface AppState {
   messagesTop: number;
   messagesHeight: number;
   isShowingFireworks: boolean;
+  isShowingSentiment: boolean;
 }
 
 export interface SetMessagesTopAction {
@@ -57,9 +58,17 @@ export interface SetIsShowingFireworksAction {
   };
 }
 
+export interface SetIsShowingSentimentAction {
+  type: 'setIsShowingSentiment';
+  payload: {
+    isShowingSentiment: boolean;
+  };
+}
+
 export type AppAction =
   | SetMessagesTopAction
   | SetMessagesHeightAction
   | AddMessageAction
   | RenderMessageAction
-  | SetIsShowingFireworksAction;
+  | SetIsShowingFireworksAction
+  | SetIsShowingSentimentAction;
