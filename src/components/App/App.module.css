@@ -15,6 +15,9 @@
   flex-direction: column;
 
   position: relative;
+  overflow: hidden;
+
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.35);
 }
 
 .Header,
@@ -23,7 +26,16 @@
 }
 
 .Header {
-  background: yellow;
+  background: lightgrey;
+  color: #222;
+
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.65);
+  z-index: 1;
+
+  padding: 8px 8px 12px;
+
+  flex: 0 0 auto;
+  text-align: center;
 }
 
 .Section {
@@ -34,25 +46,89 @@
   justify-content: flex-end;
 
   overflow-y: scroll;
-  background: magenta;
 }
 
-.Footer {
-  background: cyan;
-}
+/* .Footer {} */
 
 .Messages {
-  max-height: 100%;
   list-style-type: none;
+
+  max-height: 100%;
+
   margin: 0;
   padding: 0;
 
-  background: teal;
+  display: flex;
+  flex-direction: column;
 }
 
 .Message {
-  margin: 4px 8px;
-  padding: 8px 12px 10px;
+  border-radius: 18px;
+  box-sizing: border-box;
 
-  background: orange;
+  min-width: 36px;
+  max-width: 70%;
+
+  margin: 4px 16px;
+  padding: 10px 12px;
+
+  display: inline-flex;
+  justify-content: center;
+
+  line-height: 1;
+}
+
+.Self {
+  background: dodgerblue;
+  color: white;
+
+  align-self: flex-end;
+}
+
+.Other {
+  background: lightgrey;
+  color: #222;
+
+  align-self: flex-start;
+}
+
+.Form {
+  margin: 8px;
+  padding: 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid darkgrey;
+  border-radius: 24px;
+}
+
+.Input {
+  border: none;
+  border-radius: 10px 0 0 10px;
+  font-size: 24px;
+
+  margin-right: 4px;
+  padding: 0 10px;
+
+  flex: 1 1 auto;
+}
+
+.Button {
+  border: none;
+  border-radius: 20px;
+  font-size: 28px;
+
+  color: white;
+  background: dodgerblue;
+
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 auto;
+}
+
+.Button:disabled {
+  background: lightgrey;
 }
