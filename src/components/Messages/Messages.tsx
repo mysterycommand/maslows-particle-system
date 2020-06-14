@@ -59,7 +59,7 @@ export const Messages: FC<Props> = ({
         behavior: 'smooth',
       });
     });
-  }, [messages, messagesHeight, messagesTop]);
+  }, [messages.length]);
 
   return (
     <ol className={style.Messages} ref={messagesRef}>
