@@ -1,0 +1,40 @@
+.Form {
+  margin: 8px;
+  padding: 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid darkgrey;
+  border-radius: 24px;
+}
+
+.Input {
+  border: none;
+  border-radius: 10px 0 0 10px;
+  font-size: 24px;
+
+  margin-right: 4px;
+  padding: 0 10px;
+
+  flex: 1 1 auto;
+}
+
+.Button {
+  border: none;
+  border-radius: 20px;
+  font-size: 28px;
+
+  color: white;
+  background: dodgerblue;
+
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 auto;
+}
+
+.Button:disabled {
+  background: lightgrey;
+}
