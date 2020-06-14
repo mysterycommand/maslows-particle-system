@@ -11,24 +11,6 @@ export const App: FC = () => (
         <ol className={style.Messages}>
           <li className={clsx(style.Message, style.Other)}>hello.</li>
           <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
-          <li className={clsx(style.Message, style.Other)}>hello.</li>
-          <li className={clsx(style.Message, style.Self)}>hello.</li>
         </ol>
       </section>
       <footer className={style.Footer}>
