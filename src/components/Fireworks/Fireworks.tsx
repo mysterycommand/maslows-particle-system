@@ -114,7 +114,7 @@ export const Fireworks: FC = () => {
       firstTime || (firstTime = time);
       normalTime = time - firstTime;
 
-      if (normalTime % 1_000 < 16) {
+      if (normalTime % 1_000 < 16 && normalTime < 5_000) {
         const emitX = hw / 2 + random() * hw;
         const emitY = hh / 4 + random() * hh;
 
@@ -150,9 +150,5 @@ export const Fireworks: FC = () => {
     };
   }, [context]);
 
-  return (
-    <canvas className={style.Fireworks} ref={canvasElRef}>
-      Fireworks
-    </canvas>
-  );
+  return <canvas className={style.Fireworks} ref={canvasElRef}></canvas>;
 };
