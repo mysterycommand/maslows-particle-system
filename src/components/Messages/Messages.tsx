@@ -18,19 +18,24 @@ export const Messages: FC<Props> = ({
   messagesHeight,
   dispatch,
 }) => {
-  const messagesRef = useRef<HTMLOListElement>(null);
-  const sentinelRef = useRef<HTMLLIElement>(null);
+  const messagesElRef = useRef<HTMLOListElement>(null);
+  const sentinelElRef = useRef<HTMLLIElement>(null);
 
   const isNearBottom = useRef(true);
+
+  const messagesTopRef = useRef(messagesTop);
+  messagesTopRef.current = messagesTop;
+
   const messagesHeightRef = useRef(messagesHeight);
   messagesHeightRef.current = messagesHeight;
 
   useEffect(() => {
-    if (!messagesRef.current) {
+    if (!messagesElRef.current) {
       return;
     }
 
-    const el = messagesRef.current;
+    const el = messagesElRef.current;
+    const minScroll = el.clientHeight - 8;
 
     dispatch({
       type: 'setMessagesHeight',
@@ -40,6 +45,10 @@ export const Messages: FC<Props> = ({
     });
 
     const onScroll = () => {
+      if (el.scrollTop < messagesTopRef.current && el.scrollTop < minScroll) {
+        el.scrollTop = minScroll;
+      }
+
       dispatch({
         type: 'setMessagesTop',
         payload: {
@@ -63,11 +72,11 @@ export const Messages: FC<Props> = ({
 
     if (isNearBottom.current || isOwnMessage) {
       setImmediate(() => {
-        if (!sentinelRef.current) {
+        if (!sentinelElRef.current) {
           return;
         }
 
-        sentinelRef.current.scrollIntoView({
+        sentinelElRef.current.scrollIntoView({
           behavior: 'smooth',
         });
       });
@@ -75,14 +84,14 @@ export const Messages: FC<Props> = ({
   }, [messages]);
 
   return (
-    <ol className={style.Messages} ref={messagesRef}>
+    <ol className={style.Messages} ref={messagesElRef}>
       {messages.reduce<ReactNode[]>(
         (acc, { id, createdAt, sender, content, top, height }) => {
-          if (!messagesRef.current) {
+          if (!messagesElRef.current) {
             return acc;
           }
 
-          const { clientHeight } = messagesRef.current;
+          const { clientHeight } = messagesElRef.current;
           const didMeasure = top !== undefined && height !== undefined;
           const isInBounds =
             top &&
@@ -113,7 +122,7 @@ export const Messages: FC<Props> = ({
       <li
         className={style.Sentinel}
         style={{ top: messagesHeight }}
-        ref={sentinelRef}
+        ref={sentinelElRef}
       ></li>
     </ol>
   );

@@ -35,10 +35,10 @@ export const Message: FC<Props> = ({
   messagesHeight,
   dispatch,
 }) => {
-  const messageRef = useRef<HTMLLIElement>(null);
+  const messageElRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
-    if (!messageRef.current) {
+    if (!messageElRef.current) {
       return;
     }
 
@@ -47,8 +47,8 @@ export const Message: FC<Props> = ({
         type: 'renderMessage',
         payload: {
           id,
-          top: messagesHeight + outerTop(messageRef.current),
-          height: outerHeight(messageRef.current),
+          top: messagesHeight + outerTop(messageElRef.current),
+          height: outerHeight(messageElRef.current),
         },
       });
     }
@@ -65,7 +65,7 @@ export const Message: FC<Props> = ({
       style={{
         top,
       }}
-      ref={messageRef}
+      ref={messageElRef}
     >
       {content}
     </li>
