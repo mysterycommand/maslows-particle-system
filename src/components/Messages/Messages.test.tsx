@@ -1,7 +1,9 @@
-import React from 'react';
 import { render } from '@testing-library/react';
+import React from 'react';
+
+import { Sender } from '../../app';
+
 import { Messages } from './Messages';
-import { Sender } from '../types';
 
 test('renders Messages', () => {
   const { container } = render(

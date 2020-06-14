@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, useState } from 'react';
 
-import { AppAction, Sender } from '../types';
+import { AppAction, Sender } from '../../app';
 
 import style from './Form.module.css';
 
@@ -25,16 +25,6 @@ export const Form: FC<Props> = ({ dispatch }) => {
             content: message,
           },
         });
-
-        setTimeout(() => {
-          dispatch({
-            type: 'addMessage',
-            payload: {
-              sender: Sender.Other,
-              content: message,
-            },
-          });
-        }, 2_000);
 
         setMessage('');
       }}

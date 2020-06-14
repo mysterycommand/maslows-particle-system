@@ -16,6 +16,7 @@ export interface AppState {
   messages: MessageData[];
   messagesTop: number;
   messagesHeight: number;
+  isShowingFireworks: boolean;
 }
 
 export interface SetMessagesTopAction {
@@ -49,8 +50,16 @@ export interface RenderMessageAction {
   };
 }
 
+export interface SetIsShowingFireworksAction {
+  type: 'setIsShowingFireworks';
+  payload: {
+    isShowingFireworks: boolean;
+  };
+}
+
 export type AppAction =
   | SetMessagesTopAction
   | SetMessagesHeightAction
   | AddMessageAction
-  | RenderMessageAction;
+  | RenderMessageAction
+  | SetIsShowingFireworksAction;

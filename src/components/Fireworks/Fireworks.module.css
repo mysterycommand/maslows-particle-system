@@ -1,3 +1,14 @@
 .Fireworks {
-  background: hsl(249, 80%, 50%);
+  background: black;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
 }
