@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
+
 import style from './Fireworks.module.css';
 
 const {
@@ -9,14 +10,12 @@ const {
 
 export const Fireworks: FC = () => {
   const canvasElRef = useRef<HTMLCanvasElement>(null);
-  const contextRef = useRef<CanvasRenderingContext2D | null | undefined>();
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
     if (!(canvasElRef.current && canvasElRef.current.parentElement)) {
       return;
     }
-
-    contextRef.current = canvasElRef.current.getContext('2d');
 
     const {
       width,
@@ -27,6 +26,14 @@ export const Fireworks: FC = () => {
     canvasElRef.current.height = height * dpr;
     canvasElRef.current.style.opacity = '1';
 
+    setContext(canvasElRef.current.getContext('2d'));
+  }, []);
+
+  useEffect(() => {
+    if (!context) {
+      return;
+    }
+
     let frameId: number;
     const onFrame: FrameRequestCallback = (/* time: DOMHighResTimeStamp */) => {
       frameId = raf(onFrame);
@@ -36,7 +43,7 @@ export const Fireworks: FC = () => {
     return () => {
       caf(frameId);
     };
-  }, []);
+  }, [context]);
 
   return (
     <canvas className={style.Fireworks} ref={canvasElRef}>
