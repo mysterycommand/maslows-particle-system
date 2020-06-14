@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { Fireworks } from './Fireworks';
 
 test('renders Fireworks', () => {
-  const { getByText } = render(<Fireworks />);
-  const text = getByText(/Fireworks/i);
-  expect(text).toBeInTheDocument();
+  const { container } = render(<Fireworks />);
+  const canvas = container.querySelector('canvas');
+  expect(canvas).toBeInTheDocument();
 });
