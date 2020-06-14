@@ -1,3 +1,12 @@
+# [1.4.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.3.0...v1.4.0) (2020-06-14)
+
+
+### Features
+
+* **app/fireworks:** a pretty legit fireworks effect ([5ff757c](https://github.com/mysterycommand/maslows-particle-system/commit/5ff757cee477b50af382382d577581696f281291))
+* **app/fireworks:** basic styling and setup of a render loop ([daef76e](https://github.com/mysterycommand/maslows-particle-system/commit/daef76eea33b49c00fd2efdf7f77d202ef99287c))
+* **app/fireworks:** move types into app, add 'congrats' handler to wrappedDispatch ([dd7e512](https://github.com/mysterycommand/maslows-particle-system/commit/dd7e512a076db8db4d71421bd33078031b433f4f))
+
 # [1.3.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.2.0...v1.3.0) (2020-06-14)
 
 
