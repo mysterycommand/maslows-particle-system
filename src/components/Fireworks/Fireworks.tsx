@@ -1,4 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState, Dispatch } from 'react';
+
+import { AppAction } from '../../app';
 
 import style from './Fireworks.module.css';
 
@@ -11,6 +13,10 @@ interface Particle {
   currPos: Vec2;
   prevPos: Vec2;
   hue: number;
+}
+
+interface Props {
+  dispatch: Dispatch<AppAction>;
 }
 
 const {
@@ -74,7 +80,7 @@ const render: (
   ctx.fill();
 };
 
-export const Fireworks: FC = () => {
+export const Fireworks: FC<Props> = ({ dispatch }) => {
   const canvasElRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
@@ -142,13 +148,27 @@ export const Fireworks: FC = () => {
 
         return acc;
       }, []);
+
+      if (normalTime > 5_000 && particles.length === 0 && canvasElRef.current) {
+        canvasElRef.current.style.opacity = '0';
+        caf(frameId);
+
+        setTimeout(() => {
+          dispatch({
+            type: 'setIsShowingFireworks',
+            payload: {
+              isShowingFireworks: false,
+            },
+          });
+        }, 400);
+      }
     };
 
     frameId = raf(onFrame);
     return () => {
       caf(frameId);
     };
-  }, [context]);
+  }, [context, dispatch]);
 
   return <canvas className={style.Fireworks} ref={canvasElRef}></canvas>;
 };

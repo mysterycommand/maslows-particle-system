@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, ReactNode, useEffect, useRef } from 'react';
 
-import { AppAction, MessageData, Sender } from '../../types';
+import { AppAction, MessageData, Sender } from '../../app';
 
 import { Message } from '../Message';
 

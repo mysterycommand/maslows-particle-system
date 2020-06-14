@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { Dispatch, FC, useEffect, useRef } from 'react';
 
-import { AppAction, MessageData, Sender } from '../../types';
+import { AppAction, MessageData, Sender } from '../../app';
 
 import style from './Message.module.css';
 

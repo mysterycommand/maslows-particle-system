@@ -1,19 +1,18 @@
-import React, { FC, useReducer, useCallback } from 'react';
+import React, { FC, useCallback, useReducer } from 'react';
 
-import { initialState, reducer } from '../../app';
+import { AppAction, initialState, reducer, Sender } from '../../app';
 
 import { Fireworks } from '../Fireworks';
 import { Form } from '../Form';
 import { Messages } from '../Messages';
 
 import style from './App.module.css';
-import { AppAction, Sender } from '../../types';
 
 export const App: FC = () => {
-  const [{ messages, messagesTop, messagesHeight }, dispatch] = useReducer(
-    reducer,
-    initialState,
-  );
+  const [
+    { messages, messagesTop, messagesHeight, isShowingFireworks },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   const wrappedDispatch = useCallback(
     (action: AppAction) => {
@@ -24,7 +23,7 @@ export const App: FC = () => {
         action.payload.content.indexOf('say ') === 0
       ) {
         setTimeout(() => {
-          dispatch({
+          wrappedDispatch({
             type: 'addMessage',
             payload: {
               sender: Sender.Other,
@@ -33,13 +32,25 @@ export const App: FC = () => {
           });
         }, 2_000);
       }
+
+      if (
+        action.type === 'addMessage' &&
+        action.payload.content === 'congrats'
+      ) {
+        dispatch({
+          type: 'setIsShowingFireworks',
+          payload: {
+            isShowingFireworks: true,
+          },
+        });
+      }
     },
     [dispatch],
   );
 
   return (
     <article className={style.Device}>
-      <Fireworks />
+      {isShowingFireworks && <Fireworks dispatch={dispatch} />}
       <header className={style.Header}>Bot</header>
       <Messages
         messages={messages}

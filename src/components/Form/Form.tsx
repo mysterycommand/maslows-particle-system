@@ -1,6 +1,6 @@
 import React, { Dispatch, FC, useState } from 'react';
 
-import { AppAction, Sender } from '../../types';
+import { AppAction, Sender } from '../../app';
 
 import style from './Form.module.css';
 
