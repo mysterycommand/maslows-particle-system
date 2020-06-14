@@ -27,10 +27,32 @@
 }
 
 .Section {
-  flex: 1 1 100%;
+  flex: 0 1 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  overflow-y: scroll;
   background: magenta;
 }
 
 .Footer {
   background: cyan;
+}
+
+.Messages {
+  max-height: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+
+  background: teal;
+}
+
+.Message {
+  margin: 4px 8px;
+  padding: 8px 12px 10px;
+
+  background: orange;
 }
