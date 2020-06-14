@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, ReactNode, useEffect, useRef } from 'react';
 
 import { Message } from '../Message';
-import { AppAction, MessageData } from '../types';
+import { AppAction, MessageData, Sender } from '../types';
 
 import style from './Messages.module.css';
 
@@ -21,6 +21,10 @@ export const Messages: FC<Props> = ({
   const messagesRef = useRef<HTMLOListElement>(null);
   const sentinelRef = useRef<HTMLLIElement>(null);
 
+  const isNearBottom = useRef(true);
+  const messagesHeightRef = useRef(messagesHeight);
+  messagesHeightRef.current = messagesHeight;
+
   useEffect(() => {
     if (!messagesRef.current) {
       return;
@@ -35,13 +39,18 @@ export const Messages: FC<Props> = ({
       },
     });
 
-    const onScroll = () =>
+    const onScroll = () => {
       dispatch({
         type: 'setMessagesTop',
         payload: {
           messagesTop: el.scrollTop,
         },
       });
+
+      const scrollBottom = el.scrollTop + el.clientHeight;
+      const messagesBottom = messagesHeightRef.current - el.clientHeight / 3;
+      isNearBottom.current = scrollBottom > messagesBottom;
+    };
 
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => {
@@ -50,16 +59,20 @@ export const Messages: FC<Props> = ({
   }, [dispatch]);
 
   useEffect(() => {
-    setImmediate(() => {
-      if (!sentinelRef.current) {
-        return;
-      }
+    const isOwnMessage = messages[messages.length - 1]?.sender === Sender.Self;
 
-      sentinelRef.current.scrollIntoView({
-        behavior: 'smooth',
+    if (isNearBottom.current || isOwnMessage) {
+      setImmediate(() => {
+        if (!sentinelRef.current) {
+          return;
+        }
+
+        sentinelRef.current.scrollIntoView({
+          behavior: 'smooth',
+        });
       });
-    });
-  }, [messages.length]);
+    }
+  }, [messages]);
 
   return (
     <ol className={style.Messages} ref={messagesRef}>
@@ -70,7 +83,7 @@ export const Messages: FC<Props> = ({
           }
 
           const { clientHeight } = messagesRef.current;
-          const didMeasure = top && height;
+          const didMeasure = top !== undefined && height !== undefined;
           const isInBounds =
             top &&
             height &&
