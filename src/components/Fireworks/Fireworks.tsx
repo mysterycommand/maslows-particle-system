@@ -1,39 +1,37 @@
-import React, { FC, useEffect, useRef, useState, Dispatch } from 'react';
+import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 
 import { AppAction } from '../../app';
+import {
+  caf,
+  cos,
+  dpr,
+  Particle,
+  raf,
+  random,
+  sin,
+  Vec2,
+  π,
+  ππ,
+  add,
+  sub,
+} from '../../lib';
 
 import style from './Fireworks.module.css';
-
-interface Vec2 {
-  x: number;
-  y: number;
-}
-
-interface Particle {
-  currPos: Vec2;
-  prevPos: Vec2;
-  hue: number;
-}
 
 interface Props {
   dispatch: Dispatch<AppAction>;
 }
 
-const {
-  devicePixelRatio: dpr,
-  requestAnimationFrame: raf,
-  cancelAnimationFrame: caf,
-} = window;
+interface Spark extends Particle {
+  hue: number;
+}
 
-const { cos, PI: π, random, sin } = Math;
-const ππ = π * 2;
-
-let particles: Particle[] = [];
+let sparks: Spark[] = [];
 
 const maxSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
-const p: (x: number, y: number) => Particle = (x, y) => {
+const create: (x: number, y: number) => Spark = (x, y) => {
   const theta = random() * ππ;
   const radius = random() * maxSpeed;
 
@@ -47,17 +45,7 @@ const p: (x: number, y: number) => Particle = (x, y) => {
   };
 };
 
-const add: (a: Vec2, b: Vec2) => Vec2 = (a, b) => ({
-  x: a.x + b.x,
-  y: a.y + b.y,
-});
-
-const sub: (a: Vec2, b: Vec2) => Vec2 = (a, b) => ({
-  x: a.x - b.x,
-  y: a.y - b.y,
-});
-
-const update: (particle: Particle) => void = (p) => {
+const update: (spark: Spark) => void = (p) => {
   const currVel = add(sub(p.currPos, p.prevPos), gravity);
   const nextPos = add(p.currPos, currVel);
 
@@ -65,10 +53,10 @@ const update: (particle: Particle) => void = (p) => {
   p.currPos = nextPos;
 };
 
-const render: (
-  context: CanvasRenderingContext2D,
-  particle: Particle,
-) => void = (ctx, { currPos, prevPos, hue }) => {
+const render: (context: CanvasRenderingContext2D, spark: Spark) => void = (
+  ctx,
+  { currPos, prevPos, hue },
+) => {
   ctx.beginPath();
   ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
   ctx.ellipse(currPos.x, currPos.y, 5, 5, 0, 0, ππ);
@@ -125,19 +113,19 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
         const emitY = hh / 4 + random() * hh;
 
         for (let i = 0; i < 100; ++i) {
-          particles.push(p(emitX, emitY));
+          sparks.push(create(emitX, emitY));
         }
       }
 
       context.fillStyle = 'black';
       context.fillRect(0, 0, w, h);
 
-      particles.forEach((particle) => {
+      sparks.forEach((particle) => {
         update(particle);
         render(context, particle);
       });
 
-      particles = particles.reduce<Particle[]>((acc, p) => {
+      sparks = sparks.reduce<Particle[]>((acc, p) => {
         const {
           currPos: { x, y },
         } = p;
@@ -149,7 +137,7 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
         return acc;
       }, []);
 
-      if (normalTime > 5_000 && particles.length === 0 && canvasElRef.current) {
+      if (normalTime > 5_000 && sparks.length === 0 && canvasElRef.current) {
         canvasElRef.current.style.opacity = '0';
         caf(frameId);
 
