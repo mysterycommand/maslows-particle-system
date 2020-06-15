@@ -13,6 +13,7 @@ export const reducer: Reducer<AppState, AppAction> = (state, action) => {
         messagesTop: action.payload.messagesTop,
         messagesHeight: state.messagesHeight,
         isShowingFireworks: state.isShowingFireworks,
+        isShowingSentiment: state.isShowingSentiment,
       };
     case 'setMessagesHeight':
       return {
@@ -20,6 +21,7 @@ export const reducer: Reducer<AppState, AppAction> = (state, action) => {
         messagesTop: state.messagesTop,
         messagesHeight: action.payload.messagesHeight,
         isShowingFireworks: state.isShowingFireworks,
+        isShowingSentiment: state.isShowingSentiment,
       };
     case 'addMessage':
       return {
@@ -34,6 +36,7 @@ export const reducer: Reducer<AppState, AppAction> = (state, action) => {
         messagesTop: state.messagesTop,
         messagesHeight: state.messagesHeight,
         isShowingFireworks: state.isShowingFireworks,
+        isShowingSentiment: state.isShowingSentiment,
       };
     case 'renderMessage':
       const message = state.messages.find((m) => m.id === action.payload.id);
@@ -53,6 +56,7 @@ export const reducer: Reducer<AppState, AppAction> = (state, action) => {
             messagesTop: state.messagesTop,
             messagesHeight: state.messagesHeight + action.payload.height,
             isShowingFireworks: state.isShowingFireworks,
+            isShowingSentiment: state.isShowingSentiment,
           }
         : state;
     case 'setIsShowingFireworks':
@@ -61,6 +65,15 @@ export const reducer: Reducer<AppState, AppAction> = (state, action) => {
         messagesTop: state.messagesTop,
         messagesHeight: state.messagesHeight,
         isShowingFireworks: action.payload.isShowingFireworks,
+        isShowingSentiment: state.isShowingSentiment,
+      };
+    case 'setIsShowingSentiment':
+      return {
+        messages: state.messages,
+        messagesTop: state.messagesTop,
+        messagesHeight: state.messagesHeight,
+        isShowingFireworks: state.isShowingFireworks,
+        isShowingSentiment: action.payload.isShowingSentiment,
       };
     default:
       return state;
@@ -72,4 +85,5 @@ export const initialState: AppState = {
   messagesTop: 0,
   messagesHeight: 0,
   isShowingFireworks: false,
+  isShowingSentiment: false,
 };
