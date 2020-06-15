@@ -8,7 +8,7 @@ export const {
   cancelAnimationFrame: caf,
 } = window;
 
-export const { cos, PI: π, random, sin } = Math;
+export const { atan2, cos, PI: π, random, sin } = Math;
 export const ππ = π * 2;
 
 export const add: (a: Vec2, b: Vec2) => Vec2 = (a, b) => ({

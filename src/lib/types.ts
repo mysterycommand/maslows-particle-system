@@ -6,5 +6,10 @@ export interface Vec2 {
 export interface Particle {
   currPos: Vec2;
   prevPos: Vec2;
-  hue: number;
+}
+
+export interface Field {
+  width: number;
+  height: number;
+  time: number;
 }

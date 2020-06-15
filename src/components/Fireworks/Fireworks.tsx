@@ -2,18 +2,19 @@ import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 
 import { AppAction } from '../../app';
 import {
+  add,
   caf,
   cos,
   dpr,
+  Field,
   Particle,
   raf,
   random,
   sin,
+  sub,
   Vec2,
   π,
   ππ,
-  add,
-  sub,
 } from '../../lib';
 
 import style from './Fireworks.module.css';
@@ -26,14 +27,14 @@ interface Spark extends Particle {
   hue: number;
 }
 
-let sparks: Spark[] = [];
-
-const maxSpeed = 15;
+const maxInitialSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
-const create: (x: number, y: number) => Spark = (x, y) => {
+let sparks: Spark[] = [];
+
+const createSpark: (x: number, y: number) => Spark = (x, y) => {
   const theta = random() * ππ;
-  const radius = random() * maxSpeed;
+  const radius = random() * maxInitialSpeed;
 
   return {
     currPos: { x, y },
@@ -45,15 +46,15 @@ const create: (x: number, y: number) => Spark = (x, y) => {
   };
 };
 
-const update: (spark: Spark) => void = (p) => {
-  const currVel = add(sub(p.currPos, p.prevPos), gravity);
-  const nextPos = add(p.currPos, currVel);
+const updateSpark: (spark: Spark) => void = (spark) => {
+  const currVel = add(sub(spark.currPos, spark.prevPos), gravity);
+  const nextPos = add(spark.currPos, currVel);
 
-  p.prevPos = p.currPos;
-  p.currPos = nextPos;
+  spark.prevPos = spark.currPos;
+  spark.currPos = nextPos;
 };
 
-const render: (context: CanvasRenderingContext2D, spark: Spark) => void = (
+const renderSpark: (context: CanvasRenderingContext2D, spark: Spark) => void = (
   ctx,
   { currPos, prevPos, hue },
 ) => {
@@ -68,87 +69,103 @@ const render: (context: CanvasRenderingContext2D, spark: Spark) => void = (
   ctx.fill();
 };
 
+const createSparks: (field: Field) => void = ({ width, height, time }) => {
+  const hw = width / 2;
+  const hh = height / 2;
+
+  if (time % 1_000 < 16 && time < 5_000) {
+    const emitX = hw / 2 + random() * hw;
+    const emitY = hh / 4 + random() * hh;
+
+    for (let i = 0; i < 100; ++i) {
+      sparks.push(createSpark(emitX, emitY));
+    }
+  }
+};
+
+const renderSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
+  ctx,
+  { width, height },
+) => {
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, width, height);
+
+  sparks.forEach((spark) => {
+    updateSpark(spark);
+    renderSpark(ctx, spark);
+  });
+};
+
+const removeSparks: (field: Field) => void = ({ width, height }) => {
+  sparks = sparks.reduce<Spark[]>((acc, spark) => {
+    const {
+      currPos: { x, y },
+    } = spark;
+
+    if (0 < x && x < width && 0 < y && y < height) {
+      acc.push(spark);
+    }
+
+    return acc;
+  }, []);
+};
+
 export const Fireworks: FC<Props> = ({ dispatch }) => {
-  const canvasElRef = useRef<HTMLCanvasElement>(null);
+  const fireworksElRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
   useEffect(() => {
-    if (!(canvasElRef.current && canvasElRef.current.parentElement)) {
+    if (!(fireworksElRef.current && fireworksElRef.current.parentElement)) {
       return;
     }
 
     const {
       width,
       height,
-    } = canvasElRef.current.parentElement.getBoundingClientRect();
+    } = fireworksElRef.current.parentElement.getBoundingClientRect();
 
-    canvasElRef.current.width = width * dpr;
-    canvasElRef.current.height = height * dpr;
-    canvasElRef.current.style.opacity = '1';
+    fireworksElRef.current.width = width * dpr;
+    fireworksElRef.current.height = height * dpr;
+    fireworksElRef.current.style.opacity = '1';
 
-    setContext(canvasElRef.current.getContext('2d'));
+    setContext(fireworksElRef.current.getContext('2d'));
   }, []);
 
   useEffect(() => {
-    if (!(canvasElRef.current && context)) {
+    if (!(fireworksElRef.current && context)) {
       return;
     }
 
-    const { width: w, height: h } = canvasElRef.current;
-    const hw = w / 2;
-    const hh = h / 2;
+    const { width, height } = fireworksElRef.current;
 
     let frameId: number;
     let firstTime = 0;
-    let normalTime = 0;
+    let time = 0;
 
-    const onFrame: FrameRequestCallback = (time: DOMHighResTimeStamp) => {
+    const onFrame: FrameRequestCallback = (timeStamp: DOMHighResTimeStamp) => {
       frameId = raf(onFrame);
 
-      firstTime || (firstTime = time);
-      normalTime = time - firstTime;
+      firstTime || (firstTime = timeStamp);
+      time = timeStamp - firstTime;
 
-      if (normalTime % 1_000 < 16 && normalTime < 5_000) {
-        const emitX = hw / 2 + random() * hw;
-        const emitY = hh / 4 + random() * hh;
+      createSparks({ width, height, time });
+      renderSparks(context, { width, height, time });
+      removeSparks({ width, height, time });
 
-        for (let i = 0; i < 100; ++i) {
-          sparks.push(create(emitX, emitY));
-        }
-      }
-
-      context.fillStyle = 'black';
-      context.fillRect(0, 0, w, h);
-
-      sparks.forEach((particle) => {
-        update(particle);
-        render(context, particle);
-      });
-
-      sparks = sparks.reduce<Particle[]>((acc, p) => {
-        const {
-          currPos: { x, y },
-        } = p;
-
-        if (0 < x && x < w && 0 < y && y < h) {
-          acc.push(p);
-        }
-
-        return acc;
-      }, []);
-
-      if (normalTime > 5_000 && sparks.length === 0 && canvasElRef.current) {
-        canvasElRef.current.style.opacity = '0';
+      if (time > 5_000 && sparks.length === 0 && fireworksElRef.current) {
+        fireworksElRef.current.style.opacity = '0';
         caf(frameId);
 
-        setTimeout(() => {
-          dispatch({
-            type: 'setIsShowingFireworks',
-            payload: {
-              isShowingFireworks: false,
-            },
-          });
-        }, 400);
+        setTimeout(
+          () =>
+            dispatch({
+              type: 'setIsShowingFireworks',
+              payload: {
+                isShowingFireworks: false,
+              },
+            }),
+          400,
+        );
       }
     };
 
@@ -158,5 +175,5 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
     };
   }, [context, dispatch]);
 
-  return <canvas className={style.Fireworks} ref={canvasElRef}></canvas>;
+  return <canvas className={style.Fireworks} ref={fireworksElRef}></canvas>;
 };
