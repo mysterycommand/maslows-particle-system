@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.4.0...v1.5.0) (2020-06-15)
+
+
+### Features
+
+* **app/sentiment:** add the heart effect ([2758bc5](https://github.com/mysterycommand/maslows-particle-system/commit/2758bc5be6cc46067530154ac79d4d04f7f56977))
+* **app/sentiment:** boilerplate for a new particle-system component ([d5043a5](https://github.com/mysterycommand/maslows-particle-system/commit/d5043a5bdb733f1fa22e6669d38f1d1eb253d7e3))
+* **app/sentiment:** plumbing for a particle system that response to ❤️ emojis ([aa9699c](https://github.com/mysterycommand/maslows-particle-system/commit/aa9699c276820ba741e51de838a5fb965c6b5dd8))
+
 # [1.4.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.3.0...v1.4.0) (2020-06-14)
 
 
