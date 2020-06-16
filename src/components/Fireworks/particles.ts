@@ -19,10 +19,9 @@ const maxInitialSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
 export const numToActivate = 500;
-
-export const sparks = pool<Spark>(5_000, {
+export const sparks = pool<Spark>(5_000, () => ({
   hue: 0,
-});
+}));
 
 export const activate: (spark: Spark, x: number, y: number) => void = (
   spark,

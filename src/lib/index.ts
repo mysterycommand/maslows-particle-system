@@ -23,10 +23,10 @@ export const sub: (a: Vec2, b: Vec2) => Vec2 = (a, b) => ({
 
 export const pool: <T extends Particle>(
   ofSize: number,
-  withProps: any,
+  withProps: () => any,
 ) => T[] = (ofSize, withProps) =>
   new Array(ofSize).fill(0).map(() => ({
-    ...withProps,
+    ...withProps(),
     currPos: { x: 0, y: 0 },
     prevPos: { x: 0, y: 0 },
     active: false,

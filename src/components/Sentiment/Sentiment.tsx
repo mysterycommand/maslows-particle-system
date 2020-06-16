@@ -14,6 +14,7 @@ import {
   ππ,
   cos,
   sin,
+  pool,
 } from '../../lib';
 
 import style from './Sentiment.module.css';
@@ -31,26 +32,28 @@ interface Heart extends Particle {
 const maxInitialSpeed = 5;
 const gravity: Vec2 = { x: 0, y: -0.1 };
 
-let hearts: Heart[] = [];
+const hearts = pool<Heart>(100, () => ({
+  id: uuid(),
+  opacity: 1,
+  scale: 1,
+}));
 
-const createHeart: (x: number, y: number) => Heart = (x, y) => {
+const activateHeart: (heart: Heart, x: number, y: number) => void = (
+  heart,
+  x,
+  y,
+) => {
   const theta = random() * ππ;
   const radius = random() * maxInitialSpeed;
 
   const px = x + cos(theta) * radius;
   const py = y + sin(theta) * radius;
 
-  return {
-    currPos: { x, y },
-    prevPos: {
-      x: px,
-      y: py,
-    },
-    active: true,
-    id: uuid(),
-    opacity: 1,
-    scale: 1,
-  };
+  heart.currPos = { x, y };
+  heart.prevPos = { x: px, y: py };
+  heart.active = true;
+  heart.opacity = 1;
+  heart.scale = 1;
 };
 
 const updateHeart: (heart: Heart) => void = (h) => {
@@ -61,12 +64,15 @@ const updateHeart: (heart: Heart) => void = (h) => {
   h.currPos = nextPos;
 };
 
-const createHearts: (field: Field) => void = ({ width, height, time }) => {
+const activateHearts: (field: Field) => void = ({ width, height, time }) => {
   if (time % 80 < 16 && time < 5_000) {
     const emitX = random() * width;
     const emitY = height;
 
-    hearts.push(createHeart(emitX, emitY));
+    const inactive = hearts.find(({ active }) => !active);
+    if (inactive) {
+      activateHeart(inactive, emitX, emitY);
+    }
   }
 };
 
@@ -78,18 +84,14 @@ const updateHearts: (field: Field) => void = ({ height }) => {
   });
 };
 
-const removeHearts: (field: Field) => void = ({ width, height, time }) => {
-  hearts = hearts.reduce<Heart[]>((acc, heart) => {
+const deactivateHearts: (field: Field) => void = ({ width, height }) => {
+  hearts.forEach((heart) => {
     const {
       currPos: { x, y },
     } = heart;
 
-    if (0 < x && x < width && -40 < y && y < height + 40) {
-      acc.push(heart);
-    }
-
-    return acc;
-  }, []);
+    heart.active = 0 < x && x < width && -40 < y && y < height + 40;
+  });
 };
 
 export const Sentiment: FC<Props> = ({ dispatch }) => {
@@ -115,9 +117,9 @@ export const Sentiment: FC<Props> = ({ dispatch }) => {
       time = timeStamp - firstTime;
 
       updateHearts({ width, height, time });
-      createHearts({ width, height, time });
-      removeHearts({ width, height, time });
-      setVisibleHearts(hearts);
+      activateHearts({ width, height, time });
+      deactivateHearts({ width, height, time });
+      setVisibleHearts(hearts.filter(({ active }) => active));
 
       if (time > 5_000 && hearts.length === 0 && sentimentElRef.current) {
         sentimentElRef.current.style.opacity = '0';
