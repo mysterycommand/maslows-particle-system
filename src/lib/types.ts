@@ -6,6 +6,7 @@ export interface Vec2 {
 export interface Particle {
   currPos: Vec2;
   prevPos: Vec2;
+  active: boolean;
 }
 
 export interface Field {

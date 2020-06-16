@@ -46,6 +46,7 @@ const createHeart: (x: number, y: number) => Heart = (x, y) => {
       x: px,
       y: py,
     },
+    active: true,
     id: uuid(),
     opacity: 1,
     scale: 1,

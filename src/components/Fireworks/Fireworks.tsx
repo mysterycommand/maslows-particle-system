@@ -15,6 +15,7 @@ import {
   Vec2,
   π,
   ππ,
+  pool,
 } from '../../lib';
 
 import style from './Fireworks.module.css';
@@ -30,20 +31,22 @@ interface Spark extends Particle {
 const maxInitialSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
-let sparks: Spark[] = [];
+const sparks = pool<Spark>(1_000, {
+  hue: 0,
+});
 
-const createSpark: (x: number, y: number) => Spark = (x, y) => {
+const activateSpark: (spark: Spark, x: number, y: number) => void = (
+  spark,
+  x,
+  y,
+) => {
   const theta = random() * ππ;
   const radius = random() * maxInitialSpeed;
 
-  return {
-    currPos: { x, y },
-    prevPos: {
-      x: x + cos(theta) * radius,
-      y: y + sin(theta) * radius,
-    },
-    hue: random() * ππ * (180 / π),
-  };
+  spark.currPos = { x, y };
+  spark.prevPos = { x: x + cos(theta) * radius, y: y + sin(theta) * radius };
+  spark.active = true;
+  spark.hue = random() * ππ * (180 / π);
 };
 
 const updateSpark: (spark: Spark) => void = (spark) => {
@@ -69,21 +72,25 @@ const renderSpark: (context: CanvasRenderingContext2D, spark: Spark) => void = (
   ctx.fill();
 };
 
-const createSparks: (field: Field) => void = ({ width, height, time }) => {
+const activateSparks: (field: Field) => void = ({ width, height, time }) => {
   const hw = width / 2;
   const hh = height / 2;
 
-  if (time % 1_000 < 16 && time < 5_000) {
+  if (time % 1_000 < 20 && time < 5_000) {
     const emitX = hw / 2 + random() * hw;
     const emitY = hh / 4 + random() * hh;
 
-    for (let i = 0; i < 100; ++i) {
-      sparks.push(createSpark(emitX, emitY));
-    }
+    let i = 0;
+    sparks.forEach((spark) => {
+      if (i < 100) {
+        ++i;
+        activateSpark(spark, emitX, emitY);
+      }
+    });
   }
 };
 
-const renderSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
+const updateSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
   ctx,
   { width, height },
 ) => {
@@ -96,17 +103,13 @@ const renderSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
   });
 };
 
-const removeSparks: (field: Field) => void = ({ width, height }) => {
-  sparks = sparks.reduce<Spark[]>((acc, spark) => {
+const deactivateSparks: (field: Field) => void = ({ width, height }) => {
+  sparks.forEach((spark) => {
     const {
       currPos: { x, y },
     } = spark;
 
-    if (0 < x && x < width && 0 < y && y < height) {
-      acc.push(spark);
-    }
-
-    return acc;
+    spark.active = 0 < x && x < width && 0 < y && y < height;
   }, []);
 };
 
@@ -148,11 +151,15 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
       firstTime || (firstTime = timeStamp);
       time = timeStamp - firstTime;
 
-      createSparks({ width, height, time });
-      renderSparks(context, { width, height, time });
-      removeSparks({ width, height, time });
+      activateSparks({ width, height, time });
+      updateSparks(context, { width, height, time });
+      deactivateSparks({ width, height, time });
 
-      if (time > 5_000 && sparks.length === 0 && fireworksElRef.current) {
+      if (
+        time > 5_000 &&
+        sparks.every(({ active }) => !active) &&
+        fireworksElRef.current
+      ) {
         fireworksElRef.current.style.opacity = '0';
         caf(frameId);
 
