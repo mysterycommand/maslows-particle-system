@@ -30,7 +30,7 @@ interface Spark extends Particle {
 const maxInitialSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
-const sparks = pool<Spark>(2_000, {
+const sparks = pool<Spark>(5_000, {
   hue: 0,
 });
 
@@ -117,7 +117,7 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
 
       sparks.forEach((spark) => {
         if (!spark.active && shouldEmit) {
-          if (i < 200) {
+          if (i < 500) {
             activateSpark(spark, emitX, emitY);
             ++i;
           } else {
@@ -125,14 +125,18 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
           }
         }
 
-        updateSpark(spark);
-        renderSpark(context, spark);
-
         spark.active =
           0 < spark.currPos.x &&
           spark.currPos.x < width &&
           0 < spark.currPos.y &&
           spark.currPos.y < height;
+
+        if (!spark.active) {
+          return;
+        }
+
+        updateSpark(spark);
+        renderSpark(context, spark);
       });
 
       if (
