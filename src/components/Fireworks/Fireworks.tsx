@@ -1,114 +1,14 @@
 import React, { Dispatch, FC, useEffect, useRef, useState } from 'react';
 
 import { AppAction } from '../../app';
-import {
-  add,
-  caf,
-  cos,
-  dpr,
-  Field,
-  Particle,
-  raf,
-  random,
-  sin,
-  sub,
-  Vec2,
-  π,
-  ππ,
-} from '../../lib';
+import { caf, dpr, raf, random } from '../../lib';
 
 import style from './Fireworks.module.css';
+import { activate, numToActivate, render, sparks, update } from './particles';
 
 interface Props {
   dispatch: Dispatch<AppAction>;
 }
-
-interface Spark extends Particle {
-  hue: number;
-}
-
-const maxInitialSpeed = 15;
-const gravity: Vec2 = { x: 0, y: 0.2 };
-
-let sparks: Spark[] = [];
-
-const createSpark: (x: number, y: number) => Spark = (x, y) => {
-  const theta = random() * ππ;
-  const radius = random() * maxInitialSpeed;
-
-  return {
-    currPos: { x, y },
-    prevPos: {
-      x: x + cos(theta) * radius,
-      y: y + sin(theta) * radius,
-    },
-    hue: random() * ππ * (180 / π),
-  };
-};
-
-const updateSpark: (spark: Spark) => void = (spark) => {
-  const currVel = add(sub(spark.currPos, spark.prevPos), gravity);
-  const nextPos = add(spark.currPos, currVel);
-
-  spark.prevPos = spark.currPos;
-  spark.currPos = nextPos;
-};
-
-const renderSpark: (context: CanvasRenderingContext2D, spark: Spark) => void = (
-  ctx,
-  { currPos, prevPos, hue },
-) => {
-  ctx.beginPath();
-  ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
-  ctx.ellipse(currPos.x, currPos.y, 5, 5, 0, 0, ππ);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.fillStyle = `hsl(${(hue + 180) % 360}, 80%, 50%)`;
-  ctx.ellipse(prevPos.x, prevPos.y, 5, 5, 0, 0, ππ);
-  ctx.fill();
-};
-
-const createSparks: (field: Field) => void = ({ width, height, time }) => {
-  const hw = width / 2;
-  const hh = height / 2;
-
-  if (time % 1_000 < 16 && time < 5_000) {
-    const emitX = hw / 2 + random() * hw;
-    const emitY = hh / 4 + random() * hh;
-
-    for (let i = 0; i < 100; ++i) {
-      sparks.push(createSpark(emitX, emitY));
-    }
-  }
-};
-
-const renderSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
-  ctx,
-  { width, height },
-) => {
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, width, height);
-
-  sparks.forEach((spark) => {
-    updateSpark(spark);
-    renderSpark(ctx, spark);
-  });
-};
-
-const removeSparks: (field: Field) => void = ({ width, height }) => {
-  sparks = sparks.reduce<Spark[]>((acc, spark) => {
-    const {
-      currPos: { x, y },
-    } = spark;
-
-    if (0 < x && x < width && 0 < y && y < height) {
-      acc.push(spark);
-    }
-
-    return acc;
-  }, []);
-};
 
 export const Fireworks: FC<Props> = ({ dispatch }) => {
   const fireworksElRef = useRef<HTMLCanvasElement>(null);
@@ -137,6 +37,8 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
     }
 
     const { width, height } = fireworksElRef.current;
+    const hw = width / 2;
+    const hh = height / 2;
 
     let frameId: number;
     let firstTime = 0;
@@ -148,11 +50,43 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
       firstTime || (firstTime = timeStamp);
       time = timeStamp - firstTime;
 
-      createSparks({ width, height, time });
-      renderSparks(context, { width, height, time });
-      removeSparks({ width, height, time });
+      context.fillStyle = 'black';
+      context.fillRect(0, 0, width, height);
 
-      if (time > 5_000 && sparks.length === 0 && fireworksElRef.current) {
+      let numActivated = 0;
+      const shouldEmit = time % 1_000 < 18 && time < 5_000;
+      const emitX = hw / 2 + random() * hw;
+      const emitY = hh / 4 + random() * hh;
+
+      sparks.forEach((spark) => {
+        if (!spark.active && shouldEmit) {
+          if (numActivated < numToActivate) {
+            activate(spark, emitX, emitY);
+            ++numActivated;
+          } else {
+            return;
+          }
+        }
+
+        spark.active =
+          0 < spark.currPos.x &&
+          spark.currPos.x < width &&
+          0 < spark.currPos.y &&
+          spark.currPos.y < height;
+
+        if (!spark.active) {
+          return;
+        }
+
+        update(spark);
+        render(context, spark);
+      });
+
+      if (
+        time > 5_000 &&
+        sparks.every(({ active }) => !active) &&
+        fireworksElRef.current
+      ) {
         fireworksElRef.current.style.opacity = '0';
         caf(frameId);
 
