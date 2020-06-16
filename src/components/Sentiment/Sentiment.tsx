@@ -53,6 +53,10 @@ export const Sentiment: FC<Props> = ({ dispatch }) => {
           -40 < heart.currPos.y &&
           heart.currPos.y < height + 40;
 
+        if (!heart.active) {
+          return;
+        }
+
         update(heart, { width, height, time });
       });
 
