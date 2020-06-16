@@ -90,19 +90,6 @@ const activateSparks: (field: Field) => void = ({ width, height, time }) => {
   }
 };
 
-const updateSparks: (ctx: CanvasRenderingContext2D, field: Field) => void = (
-  ctx,
-  { width, height },
-) => {
-  ctx.fillStyle = 'black';
-  ctx.fillRect(0, 0, width, height);
-
-  sparks.forEach((spark) => {
-    updateSpark(spark);
-    renderSpark(ctx, spark);
-  });
-};
-
 const deactivateSparks: (field: Field) => void = ({ width, height }) => {
   sparks.forEach((spark) => {
     const {
@@ -151,9 +138,17 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
       firstTime || (firstTime = timeStamp);
       time = timeStamp - firstTime;
 
-      activateSparks({ width, height, time });
-      updateSparks(context, { width, height, time });
-      deactivateSparks({ width, height, time });
+      // activateSparks({ width, height, time });
+      // updateSparks(context, { width, height, time });
+      // deactivateSparks({ width, height, time });
+
+      context.fillStyle = 'black';
+      context.fillRect(0, 0, width, height);
+
+      sparks.forEach((spark) => {
+        updateSpark(spark);
+        renderSpark(context, spark);
+      });
 
       if (
         time > 5_000 &&
