@@ -31,3 +31,11 @@ export const pool: <T extends Particle>(
     prevPos: { x: 0, y: 0 },
     active: false,
   }));
+
+export const update: <T extends Particle>(particle: T) => void = (particle) => {
+  const currVel = sub(particle.currPos, particle.prevPos);
+  const nextPos = add(particle.currPos, currVel);
+
+  particle.prevPos = particle.currPos;
+  particle.currPos = nextPos;
+};
