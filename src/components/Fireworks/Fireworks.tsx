@@ -6,7 +6,6 @@ import {
   caf,
   cos,
   dpr,
-  Field,
   Particle,
   raf,
   random,
@@ -31,7 +30,7 @@ interface Spark extends Particle {
 const maxInitialSpeed = 15;
 const gravity: Vec2 = { x: 0, y: 0.2 };
 
-const sparks = pool<Spark>(1_000, {
+const sparks = pool<Spark>(2_000, {
   hue: 0,
 });
 
@@ -61,25 +60,11 @@ const renderSpark: (context: CanvasRenderingContext2D, spark: Spark) => void = (
   ctx,
   { currPos, prevPos, hue },
 ) => {
-  ctx.beginPath();
+  ctx.fillStyle = 'white';
+  ctx.fillRect(prevPos.x - 4, prevPos.y - 4, 8, 8);
+
   ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
-  ctx.ellipse(currPos.x, currPos.y, 5, 5, 0, 0, ππ);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.fillStyle = `hsl(${(hue + 180) % 360}, 80%, 50%)`;
-  ctx.ellipse(prevPos.x, prevPos.y, 5, 5, 0, 0, ππ);
-  ctx.fill();
-};
-
-const deactivateSparks: (field: Field) => void = ({ width, height }) => {
-  sparks.forEach((spark) => {
-    const {
-      currPos: { x, y },
-    } = spark;
-
-    spark.active = 0 < x && x < width && 0 < y && y < height;
-  }, []);
+  ctx.fillRect(currPos.x - 4, currPos.y - 4, 8, 8);
 };
 
 export const Fireworks: FC<Props> = ({ dispatch }) => {
@@ -122,27 +107,32 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
       firstTime || (firstTime = timeStamp);
       time = timeStamp - firstTime;
 
-      // activateSparks({ width, height, time });
-      // updateSparks(context, { width, height, time });
-      // deactivateSparks({ width, height, time });
-
       context.fillStyle = 'black';
       context.fillRect(0, 0, width, height);
 
       let i = 0;
+      const shouldEmit = time % 1_000 < 18 && time < 5_000;
       const emitX = hw / 2 + random() * hw;
       const emitY = hh / 4 + random() * hh;
 
       sparks.forEach((spark) => {
-        if (!spark.active && time % 1_000 < 20 && time < 5_000) {
-          if (i < 100) {
-            ++i;
+        if (!spark.active && shouldEmit) {
+          if (i < 200) {
             activateSpark(spark, emitX, emitY);
+            ++i;
+          } else {
+            return;
           }
         }
 
         updateSpark(spark);
         renderSpark(context, spark);
+
+        spark.active =
+          0 < spark.currPos.x &&
+          spark.currPos.x < width &&
+          0 < spark.currPos.y &&
+          spark.currPos.y < height;
       });
 
       if (
