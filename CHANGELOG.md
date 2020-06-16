@@ -1,3 +1,16 @@
+# [1.6.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.5.0...v1.6.0) (2020-06-16)
+
+
+### Features
+
+* **app/sentiment:** bail early if we're processing an inactive heart ([679bdf4](https://github.com/mysterycommand/maslows-particle-system/commit/679bdf417b909c48f45786f0a902000aff1ebb5c))
+* **lib/pool:** add an object pool, update fireworks to use it ([1f235d6](https://github.com/mysterycommand/maslows-particle-system/commit/1f235d69249185aebb1531a9fc8857f58c1e6668))
+
+
+### Reverts
+
+* **lib:** a generic Verlet integration function, no forces though ([142efa6](https://github.com/mysterycommand/maslows-particle-system/commit/142efa62841fa1e97b943f73c9e8e936011e3d20))
+
 # [1.5.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.4.0...v1.5.0) (2020-06-15)
 
 
