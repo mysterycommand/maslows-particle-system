@@ -72,24 +72,6 @@ const renderSpark: (context: CanvasRenderingContext2D, spark: Spark) => void = (
   ctx.fill();
 };
 
-const activateSparks: (field: Field) => void = ({ width, height, time }) => {
-  const hw = width / 2;
-  const hh = height / 2;
-
-  if (time % 1_000 < 20 && time < 5_000) {
-    const emitX = hw / 2 + random() * hw;
-    const emitY = hh / 4 + random() * hh;
-
-    let i = 0;
-    sparks.forEach((spark) => {
-      if (i < 100) {
-        ++i;
-        activateSpark(spark, emitX, emitY);
-      }
-    });
-  }
-};
-
 const deactivateSparks: (field: Field) => void = ({ width, height }) => {
   sparks.forEach((spark) => {
     const {
@@ -127,6 +109,8 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
     }
 
     const { width, height } = fireworksElRef.current;
+    const hw = width / 2;
+    const hh = height / 2;
 
     let frameId: number;
     let firstTime = 0;
@@ -145,7 +129,18 @@ export const Fireworks: FC<Props> = ({ dispatch }) => {
       context.fillStyle = 'black';
       context.fillRect(0, 0, width, height);
 
+      let i = 0;
+      const emitX = hw / 2 + random() * hw;
+      const emitY = hh / 4 + random() * hh;
+
       sparks.forEach((spark) => {
+        if (!spark.active && time % 1_000 < 20 && time < 5_000) {
+          if (i < 100) {
+            ++i;
+            activateSpark(spark, emitX, emitY);
+          }
+        }
+
         updateSpark(spark);
         renderSpark(context, spark);
       });
