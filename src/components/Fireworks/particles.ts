@@ -48,10 +48,10 @@ export const update: (spark: Spark) => void = (spark) => {
 export const render: (
   context: CanvasRenderingContext2D,
   spark: Spark,
-) => void = (ctx, { currPos, prevPos, hue }) => {
-  ctx.fillStyle = 'white';
-  ctx.fillRect(prevPos.x - 4, prevPos.y - 4, 8, 8);
+) => void = (context, { currPos, prevPos, hue }) => {
+  context.fillStyle = 'white';
+  context.fillRect(prevPos.x - 4, prevPos.y - 4, 8, 8);
 
-  ctx.fillStyle = `hsl(${hue}, 80%, 50%)`;
-  ctx.fillRect(currPos.x - 4, currPos.y - 4, 8, 8);
+  context.fillStyle = `hsl(${hue}, 80%, 50%)`;
+  context.fillRect(currPos.x - 4, currPos.y - 4, 8, 8);
 };
