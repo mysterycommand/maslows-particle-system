@@ -5,9 +5,13 @@ import { AppAction, initialState, reducer, Sender } from '../../app';
 import { Fireworks } from '../Fireworks';
 import { Form } from '../Form';
 import { Messages } from '../Messages';
+import { Sentiment } from '../Sentiment';
 
 import style from './App.module.css';
-import { Sentiment } from '../Sentiment';
+import { beeMovie } from '../../data';
+
+let isBeeMoviePlaying = false;
+let currentLine = 0;
 
 export const App: FC = () => {
   const [
@@ -57,6 +61,33 @@ export const App: FC = () => {
             isShowingSentiment: true,
           },
         });
+      }
+
+      if (action.payload.content === 'bee movie') {
+        isBeeMoviePlaying = !isBeeMoviePlaying;
+
+        const sendLine = () => {
+          if (!isBeeMoviePlaying) {
+            return;
+          }
+
+          currentLine++;
+          currentLine %= beeMovie.length;
+
+          setTimeout(() => {
+            dispatch({
+              type: 'addMessage',
+              payload: {
+                sender: Sender.Other,
+                content: beeMovie[currentLine],
+              },
+            });
+
+            sendLine();
+          }, 2_000);
+        };
+
+        sendLine();
       }
     },
     [dispatch],

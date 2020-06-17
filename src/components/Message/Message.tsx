@@ -67,7 +67,9 @@ export const Message: FC<Props> = ({
       }}
       ref={messageElRef}
     >
-      {content}
+      {content.split('\n').map((line) => (
+        <p className={style.Line}>{line}</p>
+      ))}
     </li>
   );
 };
