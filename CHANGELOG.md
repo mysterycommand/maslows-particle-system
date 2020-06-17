@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/mysterycommand/maslows-particle-system/compare/v1.7.0...v1.7.1) (2020-06-17)
+
+
+### Bug Fixes
+
+* **app/bee-movie:** fix typos ([63055e3](https://github.com/mysterycommand/maslows-particle-system/commit/63055e30d1002182962df166faae44e6a18da5fe))
+
 # [1.7.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.6.0...v1.7.0) (2020-06-17)
 
 
