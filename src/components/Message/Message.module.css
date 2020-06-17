@@ -9,6 +9,7 @@
   padding: 10px 12px;
 
   display: inline-flex;
+  flex-direction: column;
   justify-content: center;
 
   line-height: 1;
@@ -28,4 +29,8 @@
   color: #222;
 
   align-self: flex-start;
+}
+
+.Line {
+  margin: 0;
 }
