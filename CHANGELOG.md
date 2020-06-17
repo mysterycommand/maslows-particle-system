@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.6.0...v1.7.0) (2020-06-17)
+
+
+### Features
+
+* **app/bee-movie:** add's a bee movie handler ([aea06bc](https://github.com/mysterycommand/maslows-particle-system/commit/aea06bc40af96f83fbfa64ea83615590d752d0d9))
+
 # [1.6.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.5.0...v1.6.0) (2020-06-16)
 
 
