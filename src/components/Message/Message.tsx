@@ -67,8 +67,14 @@ export const Message: FC<Props> = ({
       }}
       ref={messageElRef}
     >
-      {content.split('\n').map((line) => (
-        <p key={line} className={style.Line}>
+      {content.split('\n').map((line, i) => (
+        <p
+          key={`${i}-${JSON.stringify(line)
+            .replace(/\W/g, '')
+            .split(' ')
+            .join('-')}`}
+          className={style.Line}
+        >
           {line}
         </p>
       ))}
