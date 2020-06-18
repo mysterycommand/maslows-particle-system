@@ -68,7 +68,9 @@ export const Message: FC<Props> = ({
       ref={messageElRef}
     >
       {content.split('\n').map((line) => (
-        <p className={style.Line}>{line}</p>
+        <p key={line} className={style.Line}>
+          {line}
+        </p>
       ))}
     </li>
   );
