@@ -89,6 +89,11 @@ export const App: FC = () => {
 
         sendLine();
       }
+
+      /**
+       * - [ ] help
+       * - [ ] echo
+       */
     },
     [dispatch],
   );
