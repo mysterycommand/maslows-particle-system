@@ -31,6 +31,12 @@
   align-self: flex-start;
 }
 
+.List {
+  list-style-type: '- ';
+  margin: 0 0 0 0.75em;
+  padding: 0;
+}
+
 .Line {
   margin: 0;
 }

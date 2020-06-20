@@ -1,5 +1,15 @@
 import clsx from 'clsx';
-import React, { Dispatch, FC, useEffect, useRef } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  Dispatch,
+  FC,
+  isValidElement,
+  ReactNode,
+  useEffect,
+  useRef,
+} from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { AppAction, MessageData, Sender } from '../../app';
 
@@ -24,6 +34,42 @@ const outerHeight: (el: HTMLElement) => number = (el) => {
     0,
   );
 };
+
+const getKey: (text: string, index: number) => string = (text, index) =>
+  `${index}-${JSON.stringify(text).replace(/\W/g, '').split(' ').join('-')}`;
+
+const renderMessage: (lines: string[]) => ReactNode = (lines) =>
+  lines.reduce<ReactNode[]>((acc, line, i) => {
+    if (line.startsWith('- ')) {
+      const l = line.slice(2).trim();
+      const li = (
+        <li key={getKey(l, i)} className={style.Line}>
+          {l || <>&nbsp;</>}
+        </li>
+      );
+
+      const uList = acc[acc.length - 1];
+      isValidElement(uList) && uList.type === 'ul'
+        ? (acc[acc.length - 1] = cloneElement(
+            uList,
+            [],
+            [...Children.toArray(uList.props.children), li],
+          ))
+        : acc.push(
+            <ul key={uuid()} className={style.List}>
+              {li}
+            </ul>,
+          );
+    } else {
+      acc.push(
+        <p key={getKey(line, i)} className={style.Line}>
+          {line || <>&nbsp;</>}
+        </p>,
+      );
+    }
+
+    return acc;
+  }, []);
 
 export const Message: FC<Props> = ({
   id,
@@ -67,17 +113,7 @@ export const Message: FC<Props> = ({
       }}
       ref={messageElRef}
     >
-      {content.split('\n').map((line, i) => (
-        <p
-          key={`${i}-${JSON.stringify(line)
-            .replace(/\W/g, '')
-            .split(' ')
-            .join('-')}`}
-          className={style.Line}
-        >
-          {line || <>&nbsp;</>}
-        </p>
-      ))}
+      {renderMessage(content.split('\n'))}
     </li>
   );
 };
