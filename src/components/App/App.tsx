@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useReducer } from 'react';
+import React, { FC, useCallback, useReducer, useEffect } from 'react';
 
 import { AppAction, initialState, reducer, Sender } from '../../app';
 
@@ -12,6 +12,18 @@ import { beeMovie } from '../../data';
 
 let isBeeMoviePlaying = false;
 let currentLine = 0;
+
+const helpMessage = `\
+I'm a kind of a chat bot, here are some things that I can do:
+
+- type 'echo' and I'll start repeating your messages
+- type 'say <% message %>' and I'll say our message back to you
+- type 'congrats' to see a celebratory fireworks display
+- type '❤️' to feel some love
+- type 'bee movie' and I'll recite the script of the 2007 cult favorite
+- type 'help' to see this message
+
+I hope you're having a great day!`;
 
 export const App: FC = () => {
   const [
@@ -43,6 +55,18 @@ export const App: FC = () => {
             },
           });
         }, 2_000);
+      }
+
+      if (action.payload.content === 'help') {
+        setTimeout(() => {
+          dispatch({
+            type: 'addMessage',
+            payload: {
+              sender: Sender.Other,
+              content: helpMessage,
+            },
+          });
+        }, 500);
       }
 
       if (action.payload.content === 'congrats') {
@@ -89,14 +113,31 @@ export const App: FC = () => {
 
         sendLine();
       }
-
-      /**
-       * - [ ] help
-       * - [ ] echo
-       */
     },
     [dispatch],
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch({
+        type: 'addMessage',
+        payload: {
+          sender: Sender.Other,
+          content: 'Hello!',
+        },
+      });
+    }, 500);
+
+    setTimeout(() => {
+      dispatch({
+        type: 'addMessage',
+        payload: {
+          sender: Sender.Other,
+          content: helpMessage,
+        },
+      });
+    }, 1_000);
+  }, []);
 
   return (
     <article className={style.Device}>
