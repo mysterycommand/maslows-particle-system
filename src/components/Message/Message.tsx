@@ -75,7 +75,7 @@ export const Message: FC<Props> = ({
             .join('-')}`}
           className={style.Line}
         >
-          {line}
+          {line || <>&nbsp;</>}
         </p>
       ))}
     </li>
