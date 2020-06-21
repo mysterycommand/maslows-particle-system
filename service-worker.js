@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/maslows-particle-system/precache-manifest.950cba9979fee6f53b63290f30233164.js"
+  "/maslows-particle-system/precache-manifest.c8d70ff1d45621ab0b37e7d00511bae3.js"
 );
 
 self.addEventListener('message', (event) => {
