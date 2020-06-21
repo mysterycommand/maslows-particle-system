@@ -1,3 +1,19 @@
+# [1.8.0](https://github.com/mysterycommand/maslows-particle-system/compare/v1.7.1...v1.8.0) (2020-06-21)
+
+
+### Bug Fixes
+
+* **app/message:** give each line a unique key ([07757ec](https://github.com/mysterycommand/maslows-particle-system/commit/07757ec25d3e8ad8b8da048a5fd6e18721dca501))
+* **app/messages:** give each line a key ([726d043](https://github.com/mysterycommand/maslows-particle-system/commit/726d0431313bbc649953b5d2c47f36744bcc1af2))
+
+
+### Features
+
+* **app:** add an echo command ([d03816e](https://github.com/mysterycommand/maslows-particle-system/commit/d03816e898c5f61e2e3c883fd3e1e25e98ba191a))
+* **app:** add help message, and handler, and display on first render ([9010b0b](https://github.com/mysterycommand/maslows-particle-system/commit/9010b0be2004e247d91b35916400576c0ce99859))
+* **app/message:** better whitespace handling for multiple new lines ([93951b0](https://github.com/mysterycommand/maslows-particle-system/commit/93951b01b61e1baa4760f27f64ad14dbfe1ac963))
+* **app/message:** parse message text for lists, add styling to handle them ([d9b866b](https://github.com/mysterycommand/maslows-particle-system/commit/d9b866b6ee8f333b1bcaa90ef14a0e791e8dfeaf))
+
 ## [1.7.1](https://github.com/mysterycommand/maslows-particle-system/compare/v1.7.0...v1.7.1) (2020-06-17)
 
 
