@@ -72,7 +72,7 @@
     "@types/react-dom": "16.9.8",
     "@types/uuid": "8.3.0",
     "commitizen": "4.2.1",
-    "cz-conventional-changelog": "3.2.1",
+    "cz-conventional-changelog": "3.3.0",
     "prettier": "2.1.1",
     "react-scripts": "3.4.3",
     "semantic-release": "17.1.1",
