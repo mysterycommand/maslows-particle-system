@@ -53,7 +53,7 @@
     "clsx": "1.1.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "uuid": "8.3.0"
+    "uuid": "8.3.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "5.0.1",
