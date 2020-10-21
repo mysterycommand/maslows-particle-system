@@ -62,7 +62,7 @@
     "@semantic-release/github": "7.1.1",
     "@semantic-release/npm": "7.0.6",
     "@semantic-release/release-notes-generator": "9.0.1",
-    "@testing-library/dom": "7.26.1",
+    "@testing-library/dom": "7.26.3",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.1.0",
     "@testing-library/user-event": "12.1.8",
