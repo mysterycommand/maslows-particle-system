@@ -5,15 +5,15 @@
     "main.js.map": "/maslows-particle-system/static/js/main.f0068896.chunk.js.map",
     "runtime-main.js": "/maslows-particle-system/static/js/runtime-main.61e62a12.js",
     "runtime-main.js.map": "/maslows-particle-system/static/js/runtime-main.61e62a12.js.map",
-    "static/js/2.ab6c70c2.chunk.js": "/maslows-particle-system/static/js/2.ab6c70c2.chunk.js",
-    "static/js/2.ab6c70c2.chunk.js.map": "/maslows-particle-system/static/js/2.ab6c70c2.chunk.js.map",
+    "static/js/2.48a078ed.chunk.js": "/maslows-particle-system/static/js/2.48a078ed.chunk.js",
+    "static/js/2.48a078ed.chunk.js.map": "/maslows-particle-system/static/js/2.48a078ed.chunk.js.map",
     "index.html": "/maslows-particle-system/index.html",
     "static/css/main.1e720a7d.chunk.css.map": "/maslows-particle-system/static/css/main.1e720a7d.chunk.css.map",
-    "static/js/2.ab6c70c2.chunk.js.LICENSE.txt": "/maslows-particle-system/static/js/2.ab6c70c2.chunk.js.LICENSE.txt"
+    "static/js/2.48a078ed.chunk.js.LICENSE.txt": "/maslows-particle-system/static/js/2.48a078ed.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.61e62a12.js",
-    "static/js/2.ab6c70c2.chunk.js",
+    "static/js/2.48a078ed.chunk.js",
     "static/css/main.1e720a7d.chunk.css",
     "static/js/main.f0068896.chunk.js"
   ]
